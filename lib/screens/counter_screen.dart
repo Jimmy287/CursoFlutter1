@@ -10,6 +10,21 @@ class CounterScreen extends StatefulWidget {
 class _CounterScreenState extends State<CounterScreen> {
   int counter = 15;
 
+  void increase() {
+    counter++;
+    setState(() {});
+  }
+
+  void decrease() {
+    counter--;
+    setState(() {});
+  }
+
+  void resetCounter() {
+    counter = 0;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     const fontSize30 = TextStyle(fontSize: 30);
@@ -28,34 +43,44 @@ class _CounterScreenState extends State<CounterScreen> {
       )),
       floatingActionButtonLocation:
           FloatingActionButtonLocation.miniCenterDocked,
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          FloatingActionButton(
-              //mini: true,
-              child: const Icon(Icons.exposure_minus_1),
-              onPressed: () {
-                counter--;
-                setState(() {});
-              }),
-          const SizedBox(width: 20),
-          FloatingActionButton(
-              //mini: true,
-              child: const Icon(Icons.accessibility_new_sharp),
-              onPressed: () {
-                counter = 0;
-                setState(() {});
-              }),
-          const SizedBox(width: 20),
-          FloatingActionButton(
-              //mini: true,
-              child: const Icon(Icons.exposure_plus_1_outlined),
-              onPressed: () {
-                counter++;
-                setState(() {});
-              }),
-        ],
+      floatingActionButton: CustomFloatingWidget(
+        increaseFn: increase,
+        decreaseFn: decrease,
+        resetCounterFn: resetCounter,
       ),
+    );
+  }
+}
+
+class CustomFloatingWidget extends StatelessWidget {
+  final Function increaseFn;
+  final Function decreaseFn;
+  final Function resetCounterFn;
+  const CustomFloatingWidget({
+    Key? key,
+    required this.increaseFn,
+    required this.decreaseFn,
+    required this.resetCounterFn,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        FloatingActionButton(
+          child: const Icon(Icons.exposure_minus_1),
+          onPressed: () => decreaseFn(),
+        ),
+        FloatingActionButton(
+          child: const Icon(Icons.accessibility_new_sharp),
+          onPressed: () => resetCounterFn(),
+        ),
+        FloatingActionButton(
+          child: const Icon(Icons.exposure_plus_1_outlined),
+          onPressed: () => increaseFn(),
+        ),
+      ],
     );
   }
 }
